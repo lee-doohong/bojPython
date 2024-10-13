@@ -1,8 +1,7 @@
 from sys import maxsize
 from sys import stdin
 
-def rl() :
-    return stdin.readline()
+rl = stdin.readline
 
 def check(i, j) :
     target = list(rawstr[i:j+1])
@@ -12,7 +11,6 @@ def check(i, j) :
         if sorted(w) == sorted(target) : #둘이 정렬해서 같을때 w 와 target단어가 얼마나 다른지 확인해 주면 된다.
             for i in range(len(w)) :
                 if w[i] != target[i] : tmpN += 1 
-            
             minN = min(tmpN, minN)
     return minN
 
@@ -30,13 +28,11 @@ def DFS(i, j) :
 rawstr = rl().strip()
 strlength = len(rawstr)
 N = int(rl())
-words = []
-for _ in range(N) :
-    words.append(list(rl().strip()))
+words = [rl().strip() for _ in range(N)]
 
 DP = [[int(i<=j) * maxsize for j in range(strlength)] for i in range(strlength)]
 flag = [[False for j in range(strlength)] for i in range(strlength)]
 
 result = DFS(0, len(rawstr) - 1)
 
-print(result if result != maxsize else -1)
+print(result if result != maxsize else -1) 
