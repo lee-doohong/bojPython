@@ -4,10 +4,11 @@ rl = sys.stdin.readline
 
 N, M = list(map(int, rl().strip().split()))
 direction = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-litercount = 0
+totalliter = 0
 
 def BFS(i, j) :
-    queue = [].append([i, j])
+    queue = []; queue.append([i, j])
+    floorPool[i][j] = False
     liter = 0
     flag = True
     while queue : #queue가 비어있지 않은 동안
@@ -21,8 +22,7 @@ def BFS(i, j) :
                 if floorPool[nI][nJ] == True : # 수영장 바닥이 낮아지면
                     queue.append([nI, nJ])
                     floorPool[nI][nJ] = False
-
-    if flag : return liter  
+    return liter if flag else 0 
 
 def search(floor) :
     liter = 0
@@ -37,8 +37,8 @@ def search(floor) :
         for j in range(M) :
             if floorPool[i][j] is True : 
                 liter += BFS(i, j)
-                
 
+    return liter
 
 pool = [list(map(int, [*input().strip()])) for _ in range(N)]
 
@@ -48,9 +48,7 @@ for i in pool :
     for j in i :
         height = max(height, j)
 
-for l in pool :
-    print(l)
+for i in range (2, height + 1) :
+    totalliter += search(i)
 
-#모든 층을 다 탐색한다(미구현)
-search(height)
-
+print(totalliter)

@@ -1,7 +1,11 @@
 from sys import maxsize
 from sys import stdin
 
-print (0<1<3)
+height = 9
+
+for i in range (2, height + 1) :
+    totalliter += search(height)
+
 
 #*은 이미 받은 것을 자르는 개념이네...
 #map을 돌리고 나면 그건 그냥 map 객체일 뿐이지 그 이상 뭐가 되는 건 아니다
