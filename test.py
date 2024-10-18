@@ -1,10 +1,10 @@
 from sys import maxsize
 from sys import stdin
 
-height = 9
+key = {'a' : 0, 'b' : 1, 'c' : 2, 'd' : 3, 'e' : 4, 'f' : 5}
 
-for i in range (2, height + 1) :
-    totalliter += search(height)
+print('z' in key)
+
 
 
 #*은 이미 받은 것을 자르는 개념이네...
