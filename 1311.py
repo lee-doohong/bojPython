@@ -54,18 +54,20 @@ def dfs2(n) : # n은 몇번째 사람에 대해서 현재 처리중인지를 하
             if former_N == sys.maxsize : continue
 
         for j in range(N) : 
-            dp[n][i | j] = min(former_N + D[n][j], dp[n][i | j])
+            j_bin = int(math.pow(2, j))
+            if(i & j_bin != 0) : continue
+            dp[n][i | j_bin] = min(former_N + D[n][j], dp[n][i | j_bin])
             # print('dfs2[{0}] dp[{1}][{2}] = {3}'.format(n, n, bin(i|j), dp[n][i | j]))
 
 if __name__ == "__main__" :
-    for i in dp :
-        print(dp)
+    # for i in dp :
+    #     print(dp)
 
     for i in range(N) :
         dfs2(i)
     
-    for i in dp :
-        print(dp)
+    # for i in dp :
+    #     print(dp)
 
     print(dp[N-1][bit_num])
 
