@@ -1,9 +1,12 @@
 from sys import maxsize
 from sys import stdin
 
+arr = [1]
 
-arr = [0, 0, 1]
-for a in arr : 
-    if a == 0 : a == 100
+def change_N(n) :
+    n.append(100)
 
-print(arr)
+if __name__ == '__main__' :
+    print(arr)
+    change_N(arr)
+    print(arr)
