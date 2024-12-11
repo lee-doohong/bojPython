@@ -18,8 +18,9 @@ arr_asmbl = []
 min_N = sys.maxsize
 
 def dfs(n, processing_arr) :
+    global min_N
     if n == N :
-        arr_asmbl.append(processing_arr)
+        min_N = min(row_cal(processing_arr), min_N)
         return
     
     # print(f'f : {n}, prcs_arr : {processing_arr}')
@@ -30,16 +31,30 @@ def dfs(n, processing_arr) :
     dfs(n+1, tmp_arr)
 
 def make_comb(n) :
-    global arr_asmbl
-    tmp_arr = []
+    # global arr_asmbl
+    global min_N
     for i in combinations(arr_num, n) :
+        tmp_arr = []
         for j in range(N) :
             if j in i :
                 tmp_arr.append(arr_raw[j])
             else : 
                 tmp_arr.append(arr_raw_rev[j])
-        arr_asmbl.append(tmp_arr)
+        min_N = min(row_cal(tmp_arr), min_N)
+        # arr_asmbl.append(tmp_arr)
+
+def make_comb2() :
+    global arr_asmbl
+    global min_N
+    for bit in range(1<<N) : #모든 경우의 수에 대해서
         tmp_arr = []
+        for i in range(N) :
+            if(bit & 1 << i) :
+                tmp_arr.append(arr_raw[i] ^ xor_N)
+            else : tmp_arr.append(arr_raw[i])
+
+        min_N=min(row_cal(tmp_arr), min_N) 
+
             
 def to_bin_arr(arr) :
     tmp_arr = ""
@@ -82,8 +97,10 @@ if __name__ == '__main__' :
         make_comb(i)
     # print(arr_asmbl)
 
-    for i in arr_asmbl : 
-        min_N = min(min_N, row_cal(i))
+    # make_comb2()
+
+    # for i in arr_asmbl : 
+    #     min_N = min(min_N, row_cal(i))
     print(min_N)
 
 
