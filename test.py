@@ -1,4 +1,6 @@
 from sys import maxsize
 from sys import stdin
 
-print(bin(1))
+arr = "11"
+arr = arr.join("111111")
+print(arr)
