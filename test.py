@@ -1,6 +1,6 @@
 from sys import maxsize
 from sys import stdin
 
-arr = "11"
-arr = arr.join("111111")
-print(arr)
+# 0이면 false 1 이면 true
+
+if (4) : print(1)
