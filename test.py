@@ -1,8 +1,7 @@
 from sys import maxsize
 from sys import stdin
 
-def test(cnt) :
-    cnt += 1
-    print(cnt)
 
-test(1)
+dic_test = {'WEST' : 100, 'EAST' : 200}
+
+print(len(dic_test))
