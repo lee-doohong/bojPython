@@ -1,7 +1,7 @@
 import sys
 
-# 동서남북 
-direction = {'east' : [0, 1], 'west' : [0, -1], 'south' : [1, 0], 'north' : [-1, 0]}
+# 동(1)서(2)남(3)북(4)
+direction = {1 : [0, 1], 2 : [0, -1], 3 : [1, 0], 4 : [-1, 0]}
 # 선언
 rl = sys.stdin.readline
 
@@ -19,93 +19,45 @@ C2 = list_C[1]
 
 result_time = sys.maxsize
 
-dp_0 = [[{'east' : sys.maxsize, 'west' : sys.maxsize, 'south' : sys.maxsize, 'north' : sys.maxsize, 'start' : sys.maxsize} for _ in range(M)] for _ in range(N)]
-dp_C1 = [[{'east' : sys.maxsize, 'west' : sys.maxsize, 'south' : sys.maxsize, 'north' : sys.maxsize} for _ in range(M)] for _ in range(N)]
-dp_C2 = [[{'east' : sys.maxsize, 'west' : sys.maxsize, 'south' : sys.maxsize, 'north' : sys.maxsize} for _ in range(M)] for _ in range(N)]
-
-def print_dp(dp) :
-    if (not dp) : return dp
-    return "\n" + "\n".join(str(s) for s in dp) + "\n"
+#dp[0 = 무방문, 1 = C1방문, 2 = C2방문][N][M] = {direction : time}
+dp = [[[{1 : sys.maxsize, 2 : sys.maxsize, 3 : sys.maxsize, 4 : sys.maxsize, 0 : sys.maxsize} for _ in range(M)] for _ in range(N)] for _ in range(3)]
 
 def check_found_C(x, y, found_C, cnt) : # 방문했던 C가 아니면 True를 뱉는다.
     if (not cnt) : return True
     else : 
         return not ([x, y] == found_C)
 
-def bfs(x, y, former_dir, time, cnt, found_C) :
-    # print(f'[dfs] x : {x}, y : {y}, former_dir : {former_dir}, time : {time}, cnt : {cnt}')
+def bfs() :
     global result_time
-    
-    if cnt == 0 :
-        dp = dp_0
-    elif found_C == C1 :
-        dp = dp_C1
-    elif found_C == C2:
-        dp = dp_C2
+    global dp
 
-    dp[x][y][former_dir] = time
-    queue = [] # queue에 넣을 부분([next_x, next_y, time+1, former_dir])
+    dp[0][start_x][start_y][0] = 0
+    queue = [] # queue에 넣을 부분([cnt, next_x, next_y, time+1, former_dir, found_C])
+    queue.append([0, start_x, start_y, 0, 0, []])
 
     while (queue) :
-        x, y, time, former_dir = queue.pop()
+        cnt, x, y, time, former_dir, found_C = queue.pop()
+
+        if (found_C == C1) : num = 1
+        elif (found_C == C2) : num = 2
+        else : num = 0 
+        
+        dp[num][x][y][former_dir] = time
+        
         for dir in direction : 
             next_x = x+direction[dir][0]; next_y = y+direction[dir][1]
-            if next_x < 0 or next_x > N - 1 or next_y < 0 or next_y > M - 1 or map[next_x][next_y] == '#' or dp[next_x][next_y][dir] < time + 1   : 
-                # print("continue")
+            if next_x < 0 or next_x > N - 1 or next_y < 0 or next_y > M - 1 or map[next_x][next_y] == '#' or dp[num][next_x][next_y][dir] <= time + 1 or former_dir == dir  : 
                 continue
-
-            if map[next_x][next_y] == 'C' and check_found_C(x, y, found_C, cnt) : 
-                bfs(x, y, former_dir, time + 1, cnt, [next_x, next_y])
-                        
+            elif map[next_x][next_y] == 'C' and check_found_C(next_x, next_y, found_C, cnt) : # 아직 발견하지 못한 C를 찾았다면
+                if (cnt == 1) :
+                    result_time = min(result_time, time + 1)
+                else :     
+                    queue.append([cnt + 1, next_x, next_y, time + 1, dir, [next_x, next_y]])
             else : 
-                # print(f'[dir] next_x : {next_x}, next_y : {next_y}')
-                dfs(next_x, next_y, dir, time + 1, cnt, found_C)
-
-    
-
-
-
-    
-
-# dfs 함수
-def dfs(x, y, former_dir, time, cnt, found_C) :
-    # print(f'[dfs] x : {x}, y : {y}, former_dir : {former_dir}, time : {time}, cnt : {cnt}')
-    global result_time
-
-    if map[x][y] == 'C' and check_found_C(x, y, found_C, cnt) :
-        # print(f'C found!! x : {x}, y : {y}, cnt : {cnt}')
-        if cnt == 1 :
-            # print(f'C found!! result_time : {result_time}, time : {time}') 
-            result_time = min(result_time, time)
-            return
-        else :
-            found_C = [x, y] 
-            dp_0[x][y][former_dir] = time
-            cnt += 1
-
-    if cnt == 0 :
-        dp = dp_0
-    elif found_C == C1 :
-        dp = dp_C1
-    elif found_C == C2:
-        dp = dp_C2
-
-    dp[x][y][former_dir] = time # 현재의 시간을 찍어준다
-
-    for dir in direction :
-        if dir != former_dir :
-            # print(f' x : {x}, y : {y}, dir : {dir}')
-            next_x = x+direction[dir][0]; next_y = y+direction[dir][1]
-            if next_x < 0 or next_x > N - 1 or next_y < 0 or next_y > M - 1 or map[next_x][next_y] == '#' or dp[next_x][next_y][dir] < time + 1   :
-                # print("continue")
-                continue
-            
-            else : 
-                # print(f'[dir] next_x : {next_x}, next_y : {next_y}')
-                dfs(next_x, next_y, dir, time + 1, cnt, found_C)
+                queue.append([cnt, next_x, next_y, time + 1, dir, found_C])
 
 # main함수
 if __name__ == "__main__" :
-    dfs(start_x, start_y, 'start', 0, 0, [])
+    bfs()
     if result_time == sys.maxsize : print(-1)
     else : print(result_time)

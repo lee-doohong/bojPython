@@ -1,7 +1,12 @@
 from sys import maxsize
 from sys import stdin
 
+a = 0
+b = 1
+c = 2
 
-dic_test = {'WEST' : 100, 'EAST' : 200}
+print(a)
+print(b)
+print(c)
 
-print(len(dic_test))
+print(bin(b|c))
