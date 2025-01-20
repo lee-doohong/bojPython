@@ -5,8 +5,7 @@ a = 0
 b = 1
 c = 2
 
-print(a)
-print(b)
-print(c)
+print(not(b&c))
 
-print(bin(b|c))
+if (not(b | c)) : print("success")
+else : print("false")

@@ -23,10 +23,12 @@ dp_0 = [[{1 : float('inf'), 2 : float('inf'), 3 : float('inf'), 4 : float('inf')
 dp_C1 = [[{1 : float('inf'), 2 : float('inf'), 3 : float('inf'), 4 : float('inf')} for _ in range(M)] for _ in range(N)]
 dp_C2 = [[{1 : float('inf'), 2 : float('inf'), 3 : float('inf'), 4 : float('inf')} for _ in range(M)] for _ in range(N)]
 
-def check_found_C(x, y, found_C, cnt) : # 방문했던 C가 아니면 True를 뱉는다.
-    if (not cnt) : return True
-    else : 
-        return not ([x, y] == found_C)
+def change_bin(x, y) :
+    if (C1 == [x, y]) :
+        return 1
+    elif (C2 == [x, y]) :
+        return 2
+    else : return -1
 
 # found_C 관련 아무것도 못발견 0b0 C1 발견 0b1 C2 발견 0b10
 def bfs(x, y, former_dir, time, cnt, found_C) :
@@ -47,16 +49,20 @@ def bfs(x, y, former_dir, time, cnt, found_C) :
         x, y, time, former_dir = queue.pop()
         dp[x][y][former_dir] = time
         for dir in direction : 
-            next_x = x+direction[dir][0]; next_y = y+direction[dir][1]
-            if next_x < 0 or next_x > N - 1 or next_y < 0 or next_y > M - 1 or map[next_x][next_y] == '#' or dp[next_x][next_y][dir] <= time + 1 or former_dir == dir  : 
+            if former_dir == dir :
                 continue
-            elif map[next_x][next_y] == 'C' and check_found_C(next_x, next_y, found_C, cnt) : 
+            next_x = x+direction[dir][0]; next_y = y+direction[dir][1]
+            if next_x < 0 or next_x > N - 1 or next_y < 0 or next_y > M - 1 or map[next_x][next_y] == '#' or dp[next_x][next_y][dir] <= time + 1 : 
+                continue
+            elif map[next_x][next_y] == 'C' and (not found_C & change_bin(next_x, next_y)) : 
                 if (cnt == 1) :
                     result_time = min(result_time, time + 1)
                 else : 
-                    bfs(next_x, next_y, dir, time + 1, cnt + 1, [next_x, next_y])
-            else : 
-                queue.append([next_x, next_y, time + 1, dir])
+                    bfs(next_x, next_y, dir, time + 1, cnt + 1, change_bin(next_x, next_y))
+            else :
+                if time + 1 >= result_time : continue 
+                else : queue.append([next_x, next_y, time + 1, dir])
+                
 
 # main함수
 if __name__ == "__main__" :
