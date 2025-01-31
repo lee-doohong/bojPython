@@ -37,6 +37,7 @@ def bfs() :
 
     while (queue) :
         cnt, x, y, time, former_dir, found_C = queue.pop()
+        if time + 1 >= result_time : continue 
 
         if (found_C == C1) : num = 1
         elif (found_C == C2) : num = 2

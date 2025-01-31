@@ -1,11 +1,10 @@
 from sys import maxsize
 from sys import stdin
 
-a = 0
-b = 1
-c = 2
 
-print(not(b&c))
+for i in range(1, 10) :
+    for j in range(1, 10) :
+        print(f'i : {i}, j : {j}')
+        if j == 5 : 
+            break
 
-if (not(b | c)) : print("success")
-else : print("false")
