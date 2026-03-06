@@ -1,4 +1,5 @@
-N = input()
-M = input()
+test_list = [1, 2]
 
-print(f"N = {N} M = {M}")
+test_list[2] = 3
+
+print(test_list)
