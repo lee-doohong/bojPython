@@ -1,7 +1,6 @@
-test_list = [1, 2]
+a = [0, 0]
 
-test_list2 = [3, 4]
+a[0] = [1, 2]
 
-test_list.extend(test_list2)
-
-print(test_list)
+for i in a :
+    print(i)
