@@ -19,18 +19,39 @@ def input_val() : #
     querys = [read_val for _ in range(Q)]
 
 def build(node, start, end) :
-    if start == end :
-        tree[start] = arr[start]
+    if start == end : # 두개가 붙었을때?
+        tree[node] = arr[start]
         return
+
+    mid = (start + end) / 2
+
+    tree[node] = build(node * 2, start, mid) + build(node * 2 + 1, mid + 1, end)
+
+def update(node, start, end, index, val) :
+    if index < start or end < index : # 범위 벗어난 경우 ? 제거
+        return
+    
+    if start == end : # 리프노드 까지 내려갔다는 의미
+        tree[node] = val
+        return
+
+    mid = (start + end) / 2
+    
+    update(node * 2, start, mid, index, val)
+    update(node * 2 + 1, mid + 1, end, index, val)
+
+    tree[node] = tree[node * 2 + 1] + tree[node * 2]
+
+def query(node, start, end, left, right) :
+    if right < start or left < end : 
+        return 0
+    
+    if left <= start and end <= right :
+        return tree[node]
     
     mid = (start + end) / 2
 
-    tree[node] = build(node, start, mid) + 
-       
-
-def update(node, start, end, index, val) :
-
-def query(node, start, end, left, right) :
+    return query(node * 2, start, mid, left, right) + query(node * 2 + 1, mid + 1, end, left, right)
 
 def solution() :
     global N, Q, arr, tree, querys
