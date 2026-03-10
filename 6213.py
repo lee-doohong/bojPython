@@ -4,11 +4,12 @@ N = Q = None
 arr = []
 tree = []
 
+
 def read_val() :
     return list(map(int, stdin.readline().strip().split()))
 
 def input_val() :
-    global N, Q, arr
+    global N, Q, arr, tree
 
     N, Q = read_val()
 
@@ -28,27 +29,23 @@ def build(node, start, end) :
 
     result1 = build(node * 2, start, mid)
     result2 = build(node * 2 + 1, mid + 1, end)
-    result1.extend(result2)
 
-    tree[node] = [min(result1), max(result1)]
-    
+    tree[node] = [min(result1[0], result2[0]), max(result1[1], result2[1])]
     return(tree[node])
 
-# 뺀 값을 반환하면 안되고 [최소, 최대] 리스트를 반환해야 한다.
 def query(node, start, end, left, right) :
-    if start == end :
-        return tree[node]
-    
     if right < start or end < left :
-        return [maxsize, -1 * maxsize] 
+        return [maxsize, -1 * maxsize]
+    
+    if (left <= start and end <= right) :
+        return tree[node]
 
     mid = int((start + end) / 2)
 
-    result1 = query(node * 2, start, mid)
-    result2 = query(node * 2 + 1, mid + 1, end)
-    result1.extend(result2)
+    result1 = query(node * 2, start, mid, left, right)
+    result2 = query(node * 2 + 1, mid + 1, end, left, right)
 
-    return [min(result1), max(result1)]
+    return [min(result1[0], result2[0]), max(result1[1], result2[1])]
 
 def solution() :
     input_val()
@@ -61,6 +58,7 @@ def solution() :
         Q_line = read_val()
         result_tmp = query(1, 1, N, Q_line[0], Q_line[1])
         result.append(str(result_tmp[1] - result_tmp[0]))
+        result_tmp = []
 
     print("\n".join(result))
 
