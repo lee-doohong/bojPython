@@ -1,6 +1,6 @@
-a = [0, 0]
 
-a[0] = [1, 2]
+a = [100, 200, 300]
 
-for i in a :
-    print(i)
+dic = {c+1:d for c, d in enumerate(a)}
+
+print(dic)
