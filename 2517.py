@@ -9,13 +9,13 @@ def input_val() :
     global N, runners, tree
 
     N = int(stdin.readline())
-    tree = [0] * N * 4
+    tree = [0] * N * 2
     
     runners = [int(stdin.readline()) for _ in range(N)]
     # print(f"runners : {runners}")
     sorted_runners = sorted(runners)
 
-    runners_dictionary = {b : a + 1  for a, b in enumerate(sorted_runners)}
+    runners_dictionary = {b : a for a, b in enumerate(sorted_runners)}
 
     for i in range(len(runners)) :
        runners[i] = runners_dictionary[runners[i]]
