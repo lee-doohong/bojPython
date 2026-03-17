@@ -1,67 +1,58 @@
 from sys import stdin
 import sys
 
-N = None
-runners = []
-tree = []
-
-def input_val() :
-    global N, runners, tree
-
-    N = int(stdin.readline())
-    tree = [0] * N * 2
-    
-    runners = [int(stdin.readline()) for _ in range(N)]
-    # print(f"runners : {runners}")
-    sorted_runners = sorted(runners)
-
-    runners_dictionary = {b : a for a, b in enumerate(sorted_runners)}
-
-    for i in range(len(runners)) :
-       runners[i] = runners_dictionary[runners[i]]
-
-def update(node, start, end, index, val) :
-    if index < start or end < index :
-       return
-   
-    if start == end :
-       tree[node] = val
-       return
-    
-    mid = (start + end) // 2 
-
-    update(node * 2, start, mid, index, val)
-    update(node * 2 + 1, mid + 1, end, index, val)
-
-    tree[node] = tree[node * 2] + tree[node * 2 + 1]
-    return 
-
-def query(node, start, end, left, right) :
-    if right < start or end < left : 
-       return 0
-    
-    if left <= start and end <= right : 
-       return tree[node]
-    
-    mid = (start + end) // 2 
-
-    return query(node * 2, start, mid, left, right) + query(node * 2 + 1, mid + 1, end, left, right)
-    
 def solution() :
-    input_val()
-
-    enable_overtake_num = []
-    result = []
-
-    for i in runners :
-       enable_overtake_num.append(query(1, 1, N, 1, i))
-       update(1, 1, N, i, 1)
-
-    for i in range(N) :
-       tmp_rank = i + 1 - enable_overtake_num[i]
-       result.append(str(tmp_rank) if tmp_rank > 0 else "1")
+   input_data = stdin.read().split()
+   if not input_data :
+      return
    
-    sys.stdout.write("\n".join(result))
+   N = int(input_data[0])
+   tree = [0] * N * 2
+
+   runners = list(map(int, input_data[1:]))
+   # 각 러너들의 기존 순위를 매긴 다음 달리기 역량 순으로 솔팅..
+   sorted_runners = sorted([(runners[i], i) for i in range(N)])
+   for r, (val, original_index) in enumerate(sorted_runners) :
+      runners[original_index]  = r
+
+   # 부모채우기
+   def update(index) :
+      tree[index] = 1
+      
+      while 1:
+         if not index // 2 : return
+         tree[index // 2] = tree[index] + tree[index ^ 1]
+         index //= 2
+
+   def query(left, right) :
+      result = 0
+
+      while left <= right :
+      # left가 홀수면 더하고 오른쪽으로 넘어가고(+1), right가 짝수면 더하고 왼쪽으로 넘어간다(-1)
+         if left & 1 :
+            result += tree[left]
+            left += 1 
+         if not (right & 1) :
+            result += tree[right]
+            right -= 1
+
+         left //= 2
+         right //= 2
+         
+      return result  
+
+   enable_overtake_num = []
+   result = []
+
+   for i in rank :
+      enable_overtake_num.append(query(N, i + N - 1))
+      update(i + N)
+   
+   for i in range(N) :
+      tmp_rank = i + 1 - enable_overtake_num[i]
+      result.append(str(tmp_rank))
+
+   sys.stdout.write("\n".join(result))
  
 if __name__ == "__main__" :
    solution()
