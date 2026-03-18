@@ -54,7 +54,7 @@ def solution() :
         input_val_now = input_line()
 
         if not input_val_now[0] : 
-            result.append(str(query(1, 1, N, input_val_now[1], input_val_now[2])))
+            result.append(str(query(1, 1, N, min(input_val_now[1], input_val_now[2]), max(input_val_now[1], input_val_now[2]))))
         else : 
             update(1, 1, N, input_val_now[1], input_val_now[2])
     

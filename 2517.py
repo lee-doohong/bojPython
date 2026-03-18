@@ -12,6 +12,9 @@ def solution() :
    runners = list(map(int, input_data[1:]))
    # 각 러너들의 기존 순위를 매긴 다음 달리기 역량 순으로 솔팅..
    sorted_runners = sorted([(runners[i], i) for i in range(N)])
+   # r 솔팅한 순위.. 역량 낮은 선수 부터 높은 선수 순... 
+   # runner[기존위치..] = 솔팅순위
+   # 기존 역량 val은 필요 없다.
    for r, (val, original_index) in enumerate(sorted_runners) :
       runners[original_index]  = r
 
@@ -44,7 +47,7 @@ def solution() :
    enable_overtake_num = []
    result = []
 
-   for i in rank :
+   for i in runners :
       enable_overtake_num.append(query(N, i + N - 1))
       update(i + N)
    
